@@ -22,6 +22,15 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    const coffeesCollection = client.db("coffeeDB").collection("coffees");
+
+    app.post("/coffees", async (req, res) => {
+      const newCoffee = req.body;
+      console.log("new coffees", newCoffee);
+      const result = await coffeesCollection.insertOne(newCoffee);
+      console.log(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
@@ -33,9 +42,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-// pass: ed5clhcru6jS4DKY
-// productsdb
 
 app.get("/", (req, res) => {
   res.send("This is my personal products");
